@@ -1,0 +1,24 @@
+{
+  "name": "express-ejs-pg-template",
+  "version": "1.0.0",
+  "description": "A basic template for Express apps with EJS and Postgres. Express Validator as well.",
+  "license": "ISC",
+  "author": "Robert Eisenman",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "initDb": "node --env-file=.env db/populatedb.js",
+    "dev": "node --env-file=.env --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrmiffmiff/express-ejs-pg-template.git"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "pg": "^8.21.0"
+  }
+}
