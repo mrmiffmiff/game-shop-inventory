@@ -9,6 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "initGames": "node --env-file=.env db/populategamestable.js",
+    "dropGames": "node --env-file=.env db/dropgamestable.js",
+    "initGenres": "node --env-file=.env db/populategenrestable.js",
+    "dropGenres": "node --env-file=.env db/dropgenrestable.js",
+    "dropCreators": "node --env-file=.env db/dropcreatorstable.js",
+    "initDb": "node --env-file=.env db/init_db.js",
+    "cleanDb": "node --env-file=.env db/clean_db.js",
     "dev": "node --env-file=.env --watch app.js"
   },
   "repository": {
