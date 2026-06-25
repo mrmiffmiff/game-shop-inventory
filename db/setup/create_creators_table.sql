@@ -1,4 +1,4 @@
-CREATE TYPE creator_type AS ENUM ('company', 'individual');
+CREATE TYPE creator_type AS ENUM ('company', 'individual', 'other');
 
 CREATE TABLE IF NOT EXISTS creators (
  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

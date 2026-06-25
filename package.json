@@ -12,7 +12,10 @@
     "dropGames": "node --env-file=.env db/setup/dropgamestable.js",
     "initGenres": "node --env-file=.env db/setup/populategenrestable.js",
     "dropGenres": "node --env-file=.env db/setup/dropgenrestable.js",
+    "initCreators": "node --env-file=.env db/setup/populatecreatorstable.js",
     "dropCreators": "node --env-file=.env db/setup/dropcreatorstable.js",
+    "initPlatforms": "node --env-file=.env db/setup/populateplatformstable.js",
+    "dropPlatforms": "node --env-file=.env db/setup/dropplatformstable.js",
     "initDb": "node --env-file=.env db/setup/init_db.js",
     "cleanDb": "node --env-file=.env db/setup/clean_db.js",
     "dev": "node --env-file=.env --watch app.js"
