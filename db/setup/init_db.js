@@ -8,6 +8,9 @@ const scripts = [
     'populategenrestable.js',
     'populatecreatorstable.js',
     'populateplatformstable.js',
+    'populategamegenrestable.js',
+    'populategamecreatorstable.js',
+    'populategameplatformstable.js',
 ];
 
 const scriptDir = import.meta.dirname;

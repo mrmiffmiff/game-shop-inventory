@@ -4,6 +4,9 @@ import path from 'node:path';
 const args = process.argv.slice(2).join(' ');
 
 const scripts = [
+    'dropgameplatformstable.js',
+    'dropgamecreatorstable.js',
+    'dropgamegenrestable.js',
     'dropplatformstable.js',
     'dropgamestable.js',
     'dropgenrestable.js',

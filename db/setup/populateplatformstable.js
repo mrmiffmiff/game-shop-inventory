@@ -9,9 +9,9 @@ const create_platforms_table_path = path.join(import.meta.dirname, 'create_platf
 const CREATE_PLATFORMS_TABLE_SQL = readFileSync(create_platforms_table_path, 'utf8');
 
 const platformsToInsert = [
-    { platform_name: 'PLATO', manufacturer: 4 },
-    { platform_name: 'Arcade', manufacturer: null },
-    { platform_name: 'Atari 2600', manufacturer: 1 },
+    { platform_name: 'PLATO', manufacturer: 4 },        // manufacturer: University of Illinois
+    { platform_name: 'Arcade', manufacturer: null },     // manufacturer: N/A
+    { platform_name: 'Atari 2600', manufacturer: 1 },   // manufacturer: Atari, Inc.
 ];
 const platformSqlParameters = [];
 const placeholders = platformsToInsert.map((platform, i) => {
