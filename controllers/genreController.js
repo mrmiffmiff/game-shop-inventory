@@ -21,3 +21,8 @@ async function getGenre(req, res) {
     const games = await db.getGamesInGenre(id);
     res.render("genre", { name: genreName, title: genreName, games: games });
 }
+
+export default {
+    getAllGenres,
+    getGenre
+}
