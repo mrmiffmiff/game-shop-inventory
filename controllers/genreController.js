@@ -16,7 +16,7 @@ async function getAllGenres(req, res) {
  * @param {import('express').Response} res 
  */
 async function getGenre(req, res) {
-    const id = Number.parseInt(req.query.id);
+    const id = Number.parseInt(req.params.id);
     const genreName = await db.getGenreNameById(id);
     const games = await db.getGamesInGenre(id);
     res.render("genre", { name: genreName, title: genreName, games: games });

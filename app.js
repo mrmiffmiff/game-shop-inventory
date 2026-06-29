@@ -16,7 +16,7 @@ app.use(express.static(assetsPath));
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", indexRouter);
+app.get("/", (req, res) => res.redirect("/genres"));
 app.use("/genres", genreRouter);
 
 app.use((err, req, res, next) => {

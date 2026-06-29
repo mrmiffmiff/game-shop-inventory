@@ -2,16 +2,19 @@ import pool from "../pool.js";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-async function getAllGenres() {
-    const { rows } = await pool.query("SELECT * FROM genres;");
-    return rows;
-}
-
 /**
  * @typedef {Object} Genre
  * @property {number} id
  * @property {string} genre
  */
+
+async function getAllGenres() {
+    /**
+     * @type {import('pg').QueryResult<Genre>}
+     */
+    const { rows } = await pool.query("SELECT * FROM genres;");
+    return rows;
+}
 
 /**
  * 
@@ -22,7 +25,7 @@ async function getGenreNameById(id) {
     /**
      * @type {import('pg').QueryResult<Genre>}
      */
-    const result = await pool.query("SELECT genre FROM genres WHERE id = $1;", id);
+    const result = await pool.query("SELECT genre FROM genres WHERE id = $1;", [id]);
     return result.rows[0].genre;
 }
 
@@ -40,7 +43,7 @@ async function getGamesInGenre(id) {
     /**
      * @type {import('pg').QueryResult<Game>}
      */
-    const result = await pool.query(GAMES_BY_GENRE_SQL, id);
+    const result = await pool.query(GAMES_BY_GENRE_SQL, [id]);
     return result.rows;
 }
 
