@@ -5,7 +5,7 @@
         <!-- Placeholderey until we link to the games -->
         <ul>
             <% for (const game of locals.games) {%>
-                <li><%= game.game_name %></li>
+                <%- include('partials/gameListing', { game: game }) %>
             <% } %>
         </ul>
     <% } %>
