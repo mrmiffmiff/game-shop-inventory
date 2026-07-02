@@ -1,0 +1,10 @@
+<%- include('partials/head') %>
+    <h1>All Games</h1>
+    <% if (locals.games) {%>
+        <ul>
+            <% for (const game of locals.games) {%>
+                <%- include('partials/gameListing', { game: game }) %>
+            <% } %>
+        </ul>
+    <% } %>
+<%- include('partials/foot') %>

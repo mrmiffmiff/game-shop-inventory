@@ -1,0 +1,11 @@
+<%- include('partials/head') %>
+    <h1><%= locals.game_name %></h1>
+    <% if (locals.genres) {%>
+        <h2>Genres</h2>
+        <ul>
+            <% for (const genre of locals.genres) {%>
+                <%- include('partials/genreListing', { genre: genre }) %>
+            <% } %>
+        </ul>
+    <% } %>
+<%- include('partials/foot') %>
