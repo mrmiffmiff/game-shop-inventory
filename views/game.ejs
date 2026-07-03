@@ -1,5 +1,6 @@
 <%- include('partials/head') %>
-    <h1><%= locals.game_name %></h1>
+    <h1><%= locals.game.game_name %></h1>
+    Released in <%= locals.game.release_year %>
     <% if (locals.genres) {%>
         <h2>Genres</h2>
         <ul>
@@ -8,4 +9,5 @@
             <% } %>
         </ul>
     <% } %>
+    <p><a href="/games/">Back to game list</a></p>
 <%- include('partials/foot') %>
