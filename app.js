@@ -4,6 +4,8 @@ const __dirname = import.meta.dirname;
 import indexRouter from "./routes/indexRouter.js";
 import genreRouter from "./routes/genreRouter.js";
 import gameRouter from "./routes/gameRouter.js";
+import platformRouter from "./routes/platformRouter.js";
+import creatorRouter from "./routes/creatorRouter.js";
 
 const app = express();
 app.disable("x-powered-by"); // No reason to disclose
@@ -20,6 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => res.redirect("/games"));
 app.use("/genres", genreRouter);
 app.use("/games", gameRouter);
+app.use("/platforms", platformRouter);
+app.use("/creators", creatorRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

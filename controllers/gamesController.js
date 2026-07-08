@@ -19,7 +19,9 @@ async function getGame(req, res) {
     const id = Number.parseInt(req.params.id);
     const game = await db.getGameById(id);
     const genres = await db.getGenresOfGame(id);
-    res.render("game", { title: game.game_name, game: game, genres: genres });
+    const platforms = await db.getPlatformsOfGame(id);
+    const creators = await db.getCreatorsOfGame(id);
+    res.render("game", { title: game.game_name, game: game, genres: genres, platforms: platforms, creators: creators });
 }
 
 export default {

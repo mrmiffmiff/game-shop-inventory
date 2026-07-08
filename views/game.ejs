@@ -9,5 +9,21 @@
             <% } %>
         </ul>
     <% } %>
+    <% if (locals.platforms) {%>
+        <h2>Platforms</h2>
+        <ul>
+            <% for (const platform of locals.platforms) {%>
+                <%- include('partials/platformListing', { platform: platform }) %>
+            <% } %>
+        </ul>
+    <% } %>
+    <% if (locals.creators) {%>
+        <h2>Creators</h2>
+        <ul>
+            <% for (const creator of locals.creators) {%>
+                <%- include('partials/creatorListing', { creator: creator, role: creator.role }) %>
+            <% } %>
+        </ul>
+    <% } %>
     <p><a href="/games/">Back to game list</a></p>
 <%- include('partials/foot') %>

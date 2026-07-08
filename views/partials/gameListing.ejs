@@ -1,1 +1,1 @@
-<li><a href="/games/<%= game.id %>"><%= game.game_name %> - <%= game.release_year %></a></li>
+<li><a href="/games/<%= game.id %>"><%= game.game_name %> - <%= game.release_year %></a><% if (locals.role) { %> (<%= locals.role %>)<% } %></li>

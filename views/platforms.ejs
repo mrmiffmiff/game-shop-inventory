@@ -1,0 +1,10 @@
+<%- include('partials/head') %>
+    <h1>All Platforms</h1>
+    <% if (locals.platforms) {%>
+        <ul>
+            <% for (const platform of locals.platforms) {%>
+                <%- include('partials/platformListing', { platform: platform }) %>
+            <% } %>
+        </ul>
+    <% } %>
+<%- include('partials/foot') %>

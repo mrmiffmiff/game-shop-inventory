@@ -47,8 +47,45 @@ async function getGenresOfGame(id) {
     return result.rows;
 }
 
+const platforms_of_game_path = path.join(import.meta.dirname, 'platforms_of_game.sql');
+const PLATFORMS_OF_GAME_SQL = readFileSync(platforms_of_game_path, 'utf8');
+
+/**
+ * @typedef {Object} Platform
+ * @property {number} id
+ * @property {string} platform_name
+ */
+
+async function getPlatformsOfGame(id) {
+    /**
+     * @type {import('pg').QueryResult<Platform>}
+     */
+    const result = await pool.query(PLATFORMS_OF_GAME_SQL, [id]);
+    return result.rows;
+}
+
+const creators_of_game_path = path.join(import.meta.dirname, 'creators_of_game.sql');
+const CREATORS_OF_GAME_SQL = readFileSync(creators_of_game_path, 'utf8');
+
+/**
+ * @typedef {Object} CreatorWithRole
+ * @property {number} id
+ * @property {string} creator_name
+ * @property {string} role
+ */
+
+async function getCreatorsOfGame(id) {
+    /**
+     * @type {import('pg').QueryResult<CreatorWithRole>}
+     */
+    const result = await pool.query(CREATORS_OF_GAME_SQL, [id]);
+    return result.rows;
+}
+
 export default {
     getAllGames,
     getGameById,
     getGenresOfGame,
+    getPlatformsOfGame,
+    getCreatorsOfGame,
 }

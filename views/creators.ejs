@@ -1,0 +1,10 @@
+<%- include('partials/head') %>
+    <h1>All Creators</h1>
+    <% if (locals.creators) {%>
+        <ul>
+            <% for (const creator of locals.creators) {%>
+                <%- include('partials/creatorListing', { creator: creator }) %>
+            <% } %>
+        </ul>
+    <% } %>
+<%- include('partials/foot') %>
