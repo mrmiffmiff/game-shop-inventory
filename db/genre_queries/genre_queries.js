@@ -16,6 +16,11 @@ async function getAllGenres() {
     return rows;
 }
 
+async function addNewGenre(name) {
+    const addGenreSQL = "INSERT INTO genres (genre) VALUES ($1);";
+    await pool.query(addGenreSQL, [name]);
+}
+
 /**
  * 
  * @param {number} id 
@@ -27,6 +32,11 @@ async function getGenreNameById(id) {
      */
     const result = await pool.query("SELECT genre FROM genres WHERE id = $1;", [id]);
     return result.rows[0].genre;
+}
+
+async function updateGenreNameById(id, name) {
+    const updateSQL = "UPDATE genres SET genre = $1 WHERE id = $2;";
+    await pool.query(updateSQL, [name, id]);
 }
 
 const games_by_genre_path = path.join(import.meta.dirname, 'games_by_genre.sql');
@@ -49,6 +59,8 @@ async function getGamesInGenre(id) {
 
 export default {
     getAllGenres,
+    addNewGenre,
     getGenreNameById,
+    updateGenreNameById,
     getGamesInGenre,
 };

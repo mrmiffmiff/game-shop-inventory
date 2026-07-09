@@ -1,8 +1,8 @@
 <%- include('partials/head') %>
     <h1><%= locals.name %></h1>
+    <a href="/genres/<%= locals.id %>/edit">Change Name</a>
     <% if (locals.games) {%>
         <h2>Games of this genre</h2>
-        <!-- Placeholderey until we link to the games -->
         <ul>
             <% for (const game of locals.games) {%>
                 <%- include('partials/gameListing', { game: game }) %>

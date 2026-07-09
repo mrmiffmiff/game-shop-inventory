@@ -1,5 +1,6 @@
 import path from "node:path";
 import express from "express";
+import methodOverride from 'method-override';
 const __dirname = import.meta.dirname;
 import indexRouter from "./routes/indexRouter.js";
 import genreRouter from "./routes/genreRouter.js";
@@ -18,6 +19,8 @@ const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 
 app.use(express.urlencoded({ extended: true }));
+
+app.use(methodOverride('_method'));
 
 app.get("/", (req, res) => res.redirect("/games"));
 app.use("/genres", genreRouter);

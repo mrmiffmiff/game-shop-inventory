@@ -1,5 +1,6 @@
 <%- include('partials/head') %>
     <h1>All Genres</h1>
+    <a href="genres/create">Create Genre</a>
     <% if (locals.genres) {%>
         <ul>
             <% for (const genre of locals.genres) {%>
