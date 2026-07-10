@@ -1,0 +1,21 @@
+<%- include('partials/head') %>
+    <h1><%= locals.header %></h1>
+    <%- include('partials/errors') %>
+    <form action="<%= locals.creator ? '/creators/' + locals.creator.id + '/edit?_method=PUT' : '/creators/create' %>" method="post">
+        <label for="creatorName">Creator Name: </label>
+        <input type="text" name="creatorName" id="creatorName" value="<%= locals.creatorName ? locals.creatorName : '' %>" required>
+        <label for="country">Country: </label>
+        <input type="text" name="country" id="country" value="<%= locals.country ? locals.country : '' %>">
+        <label for="website">Website: </label>
+        <input type="text" name="website" id="website" value="<%= locals.website ? locals.website : '' %>">
+        <label for="foundingYear">Founding Year: </label>
+        <input type="number" name="foundingYear" id="foundingYear" value="<%= locals.foundingYear ? locals.foundingYear : '' %>">
+        <label for="type">Type: </label>
+        <select name="type" id="type">
+            <% for (const creatorType of locals.creatorTypes) { %>
+                <option value="<%= creatorType %>" <%= locals.type === creatorType ? 'selected' : '' %>><%= creatorType %></option>
+            <% } %>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+<%- include('partials/foot') %>

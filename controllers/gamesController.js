@@ -1,9 +1,10 @@
 import db from "../db/game_queries/game_queries.js";
+import { body, validationResult, matchedData } from "express-validator";
 
 /**
- * 
- * @param {import('express').Request} req 
- * @param {import('express').Response} res 
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function getAllGames(req, res) {
     const games = await db.getAllGames();
@@ -11,9 +12,51 @@ async function getAllGames(req, res) {
 }
 
 /**
- * 
- * @param {import('express').Request} req 
- * @param {import('express').Response} res 
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+*/
+async function getCreateGame(req, res) {
+    res.render("gameForm", { title: "Create New Game", header: "Create New Game", game: null, gameName: null, releaseYear: null });
+}
+
+const validateGame = [
+    body("gameName").trim().customSanitizer(value => {
+        if (!value) return value;
+        return value
+            .replace(/[‘’‚‛]/g, "'")
+            .replace(/[“”„‟]/g, '"');
+    })
+        .notEmpty().withMessage("Game name cannot be blank."),
+    body("releaseYear").trim().optional({ checkFalsy: true })
+        .isInt({ min: 1900 }).withMessage("Release year must be a number no earlier than 1900.")
+        .toInt(),
+];
+
+const postCreateGame = [
+    validateGame,
+    /**
+     *
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async (req, res) => {
+        const inputName = req.body.gameName;
+        const inputYear = req.body.releaseYear;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render("gameForm", { title: "Create New Game", header: "Create New Game", game: null, gameName: inputName, releaseYear: inputYear, errors: errors.array(), });
+        }
+        const { gameName, releaseYear } = matchedData(req);
+        await db.addNewGame(gameName, releaseYear ?? null);
+        res.redirect("/games");
+    }
+];
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function getGame(req, res) {
     const id = Number.parseInt(req.params.id);
@@ -24,7 +67,44 @@ async function getGame(req, res) {
     res.render("game", { title: game.game_name, game: game, genres: genres, platforms: platforms, creators: creators });
 }
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function getEditGame(req, res) {
+    const id = Number.parseInt(req.params.id);
+    const game = await db.getGameById(id);
+    res.render("gameForm", { title: "Edit Game", header: "Edit Game", game: game, gameName: game.game_name, releaseYear: game.release_year });
+}
+
+const putEditGame = [
+    validateGame,
+    /**
+     *
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async (req, res) => {
+        const inputName = req.body.gameName;
+        const inputYear = req.body.releaseYear;
+        const id = Number.parseInt(req.params.id);
+        const oldGame = await db.getGameById(id);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render("gameForm", { title: "Edit Game", header: "Edit Game", game: oldGame, gameName: inputName, releaseYear: inputYear, errors: errors.array(), });
+        }
+        const { gameName, releaseYear } = matchedData(req);
+        await db.updateGameById(id, gameName, releaseYear ?? null);
+        res.redirect("/games/" + id);
+    }
+]
+
 export default {
     getAllGames,
+    getCreateGame,
+    postCreateGame,
+    getEditGame,
+    putEditGame,
     getGame
 }

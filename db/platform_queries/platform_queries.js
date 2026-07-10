@@ -45,6 +45,16 @@ async function getPlatformById(id) {
     return result.rows[0];
 }
 
+async function addNewPlatform(name, manufacturer) {
+    const addPlatformSQL = "INSERT INTO platforms (platform_name, manufacturer) VALUES ($1, $2);";
+    await pool.query(addPlatformSQL, [name, manufacturer]);
+}
+
+async function updatePlatformById(id, name, manufacturer) {
+    const updateSQL = "UPDATE platforms SET platform_name = $1, manufacturer = $2 WHERE id = $3;";
+    await pool.query(updateSQL, [name, manufacturer, id]);
+}
+
 const games_by_platform_path = path.join(import.meta.dirname, 'games_by_platform.sql');
 const GAMES_BY_PLATFORM_SQL = readFileSync(games_by_platform_path, 'utf8');
 
@@ -66,5 +76,7 @@ async function getGamesOnPlatform(id) {
 export default {
     getAllPlatforms,
     getPlatformById,
+    addNewPlatform,
+    updatePlatformById,
     getGamesOnPlatform,
 };

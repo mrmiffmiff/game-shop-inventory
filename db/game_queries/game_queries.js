@@ -30,6 +30,16 @@ async function getGameById(id) {
     return result.rows[0];
 }
 
+async function addNewGame(name, releaseYear) {
+    const addGameSQL = "INSERT INTO games (game_name, release_year) VALUES ($1, $2);";
+    await pool.query(addGameSQL, [name, releaseYear]);
+}
+
+async function updateGameById(id, name, releaseYear) {
+    const updateSQL = "UPDATE games SET game_name = $1, release_year = $2 WHERE id = $3;";
+    await pool.query(updateSQL, [name, releaseYear, id]);
+}
+
 const genres_of_game_path = path.join(import.meta.dirname, 'genres_of_game.sql');
 const GENRES_OF_GAME_SQL = readFileSync(genres_of_game_path, 'utf8');
 
@@ -85,6 +95,8 @@ async function getCreatorsOfGame(id) {
 export default {
     getAllGames,
     getGameById,
+    addNewGame,
+    updateGameById,
     getGenresOfGame,
     getPlatformsOfGame,
     getCreatorsOfGame,

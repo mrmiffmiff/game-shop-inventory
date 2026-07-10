@@ -1,7 +1,8 @@
 <%- include('partials/head') %>
     <h1><%= locals.game.game_name %></h1>
+    <a href="/games/<%= locals.game.id %>/edit">Edit Game</a>
     Released in <%= locals.game.release_year %>
-    <% if (locals.genres) {%>
+    <% if (locals.genres.length > 0) {%>
         <h2>Genres</h2>
         <ul>
             <% for (const genre of locals.genres) {%>
@@ -9,7 +10,7 @@
             <% } %>
         </ul>
     <% } %>
-    <% if (locals.platforms) {%>
+    <% if (locals.platforms.length > 0) {%>
         <h2>Platforms</h2>
         <ul>
             <% for (const platform of locals.platforms) {%>
@@ -17,7 +18,7 @@
             <% } %>
         </ul>
     <% } %>
-    <% if (locals.creators) {%>
+    <% if (locals.creators.length > 0) {%>
         <h2>Creators</h2>
         <ul>
             <% for (const creator of locals.creators) {%>

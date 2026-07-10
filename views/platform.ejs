@@ -1,11 +1,12 @@
 <%- include('partials/head') %>
     <h1><%= locals.platform.platform_name %></h1>
+    <a href="/platforms/<%= locals.platform.id %>/edit">Edit Platform</a>
     <% if (locals.platform.manufacturer) { %>
         <p>Manufacturer: <a href="/creators/<%= locals.platform.manufacturer %>"><%= locals.platform.manufacturer_name %></a></p>
     <% } else { %>
         <p>Manufacturer: none</p>
     <% } %>
-    <% if (locals.games) {%>
+    <% if (locals.games.length > 0) {%>
         <h2>Games available on this platform</h2>
         <ul>
             <% for (const game of locals.games) {%>

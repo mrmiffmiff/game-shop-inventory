@@ -33,6 +33,21 @@ async function getCreatorById(id) {
     return result.rows[0];
 }
 
+async function getCreatorTypes() {
+    const result = await pool.query("SELECT unnest(enum_range(NULL::creator_type))::text AS type;");
+    return result.rows.map(row => row.type);
+}
+
+async function addNewCreator(name, foundingYear, country, website, type) {
+    const addCreatorSQL = "INSERT INTO creators (creator_name, founding_year, country, website, type) VALUES ($1, $2, $3, $4, $5);";
+    await pool.query(addCreatorSQL, [name, foundingYear, country, website, type]);
+}
+
+async function updateCreatorById(id, name, foundingYear, country, website, type) {
+    const updateSQL = "UPDATE creators SET creator_name = $1, founding_year = $2, country = $3, website = $4, type = $5 WHERE id = $6;";
+    await pool.query(updateSQL, [name, foundingYear, country, website, type, id]);
+}
+
 const games_by_creator_path = path.join(import.meta.dirname, 'games_by_creator.sql');
 const GAMES_BY_CREATOR_SQL = readFileSync(games_by_creator_path, 'utf8');
 
@@ -55,5 +70,8 @@ async function getGamesByCreator(id) {
 export default {
     getAllCreators,
     getCreatorById,
+    getCreatorTypes,
+    addNewCreator,
+    updateCreatorById,
     getGamesByCreator,
 };

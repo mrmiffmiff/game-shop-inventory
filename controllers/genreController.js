@@ -25,6 +25,7 @@ const validateGenre = [
         if (!value) return value;
         return value.replace(/[\u2018\u2019\u201A\u201B]/g, "'");
     })
+        .notEmpty().withMessage("Genre name cannot be blank.")
         .isAlphanumeric('en-US', {
             ignore: " '-&/"
         }).withMessage("Genre name must contain alphabetic characters, spaces, -, &, ', / only."),

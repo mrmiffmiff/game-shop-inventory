@@ -1,0 +1,11 @@
+<%- include('partials/head') %>
+    <h1><%= locals.header %></h1>
+    <%- include('partials/errors') %>
+    <form action="<%= locals.game ? '/games/' + locals.game.id + '/edit?_method=PUT' : '/games/create' %>" method="post">
+        <label for="gameName">Game Name: </label>
+        <input type="text" name="gameName" id="gameName" value="<%= locals.gameName ? locals.gameName : '' %>" required>
+        <label for="releaseYear">Release Year: </label>
+        <input type="number" name="releaseYear" id="releaseYear" min="1900" value="<%= locals.releaseYear ? locals.releaseYear : '' %>">
+        <button type="submit">Submit</button>
+    </form>
+<%- include('partials/foot') %>

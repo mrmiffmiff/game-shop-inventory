@@ -3,7 +3,7 @@
     <%- include('partials/errors') %>
     <form action="<%= locals.genre ? '/genres/' + locals.genre.id + '/edit?_method=PUT' : '/genres/create' %>" method="post">
         <label for="genreName">Genre Name: </label>
-        <input type="text" name="genreName" id="genreName" value="<%= locals.genreName ? locals.genreName : '' %>">
+        <input type="text" name="genreName" id="genreName" value="<%= locals.genreName ? locals.genreName : '' %>" required>
         <button type="submit">Submit</button>
     </form>
 <%- include('partials/foot') %>
