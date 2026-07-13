@@ -17,7 +17,7 @@ async function getAllGames(req, res) {
  * @param {import('express').Response} res
 */
 async function getCreateGame(req, res) {
-    res.render("gameForm", { title: "Create New Game", header: "Create New Game", game: null, gameName: null, releaseYear: null });
+    res.render("gameForm", { title: "Create New Game", header: "Create New Game", game: null, gameName: null, releaseYear: null, quantity: 0 });
 }
 
 const validateGame = [
@@ -31,6 +31,9 @@ const validateGame = [
     body("releaseYear").trim().optional({ checkFalsy: true })
         .isInt({ min: 1900 }).withMessage("Release year must be a number no earlier than 1900.")
         .toInt(),
+    body("quantity").trim()
+        .isInt({ min: 0 }).withMessage("Quantity must be a whole number no less than 0.")
+        .toInt(),
 ];
 
 const postCreateGame = [
@@ -43,12 +46,13 @@ const postCreateGame = [
     async (req, res) => {
         const inputName = req.body.gameName;
         const inputYear = req.body.releaseYear;
+        const inputQuantity = req.body.quantity;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).render("gameForm", { title: "Create New Game", header: "Create New Game", game: null, gameName: inputName, releaseYear: inputYear, errors: errors.array(), });
+            return res.status(400).render("gameForm", { title: "Create New Game", header: "Create New Game", game: null, gameName: inputName, releaseYear: inputYear, quantity: inputQuantity, errors: errors.array(), });
         }
-        const { gameName, releaseYear } = matchedData(req);
-        await db.addNewGame(gameName, releaseYear ?? null);
+        const { gameName, releaseYear, quantity } = matchedData(req);
+        await db.addNewGame(gameName, releaseYear ?? null, quantity);
         res.redirect("/games");
     }
 ];
@@ -75,7 +79,7 @@ async function getGame(req, res) {
 async function getEditGame(req, res) {
     const id = Number.parseInt(req.params.id);
     const game = await db.getGameById(id);
-    res.render("gameForm", { title: "Edit Game", header: "Edit Game", game: game, gameName: game.game_name, releaseYear: game.release_year });
+    res.render("gameForm", { title: "Edit Game", header: "Edit Game", game: game, gameName: game.game_name, releaseYear: game.release_year, quantity: game.quantity });
 }
 
 const putEditGame = [
@@ -88,14 +92,15 @@ const putEditGame = [
     async (req, res) => {
         const inputName = req.body.gameName;
         const inputYear = req.body.releaseYear;
+        const inputQuantity = req.body.quantity;
         const id = Number.parseInt(req.params.id);
         const oldGame = await db.getGameById(id);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).render("gameForm", { title: "Edit Game", header: "Edit Game", game: oldGame, gameName: inputName, releaseYear: inputYear, errors: errors.array(), });
+            return res.status(400).render("gameForm", { title: "Edit Game", header: "Edit Game", game: oldGame, gameName: inputName, releaseYear: inputYear, quantity: inputQuantity, errors: errors.array(), });
         }
-        const { gameName, releaseYear } = matchedData(req);
-        await db.updateGameById(id, gameName, releaseYear ?? null);
+        const { gameName, releaseYear, quantity } = matchedData(req);
+        await db.updateGameById(id, gameName, releaseYear ?? null, quantity);
         res.redirect("/games/" + id);
     }
 ]

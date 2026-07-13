@@ -6,6 +6,8 @@
         <input type="text" name="gameName" id="gameName" value="<%= locals.gameName ? locals.gameName : '' %>" required>
         <label for="releaseYear">Release Year: </label>
         <input type="number" name="releaseYear" id="releaseYear" min="1900" value="<%= locals.releaseYear ? locals.releaseYear : '' %>">
+        <label for="quantity">Quantity: </label>
+        <input type="number" name="quantity" id="quantity" min="0" value="<%= locals.quantity != null ? locals.quantity : 0 %>" required>
         <button type="submit">Submit</button>
     </form>
 <%- include('partials/foot') %>

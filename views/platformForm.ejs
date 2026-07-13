@@ -4,13 +4,6 @@
     <form action="<%= locals.platform ? '/platforms/' + locals.platform.id + '/edit?_method=PUT' : '/platforms/create' %>" method="post">
         <label for="platformName">Platform Name: </label>
         <input type="text" name="platformName" id="platformName" value="<%= locals.platformName ? locals.platformName : '' %>" required>
-        <label for="manufacturer">Manufacturer: </label>
-        <select name="manufacturer" id="manufacturer">
-            <option value="">(none)</option>
-            <% for (const creator of locals.creators) { %>
-                <option value="<%= creator.id %>" <%= locals.manufacturer && Number(locals.manufacturer) === creator.id ? 'selected' : '' %>><%= creator.creator_name %></option>
-            <% } %>
-        </select>
         <button type="submit">Submit</button>
     </form>
 <%- include('partials/foot') %>

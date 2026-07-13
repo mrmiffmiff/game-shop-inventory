@@ -6,7 +6,6 @@ import path from "node:path";
  * @typedef {Object} Platform
  * @property {number} id
  * @property {string} platform_name
- * @property {number|null} manufacturer
  */
 
 async function getAllPlatforms() {
@@ -18,41 +17,26 @@ async function getAllPlatforms() {
 }
 
 /**
- * @typedef {Object} PlatformWithManufacturer
- * @property {number} id
- * @property {string} platform_name
- * @property {number|null} manufacturer
- * @property {string|null} manufacturer_name
- */
-
-/**
  *
  * @param {number} id
  * @returns
  */
 async function getPlatformById(id) {
     /**
-     * @type {import('pg').QueryResult<PlatformWithManufacturer>}
+     * @type {import('pg').QueryResult<Platform>}
      */
-    const result = await pool.query(
-        `SELECT platforms.id, platforms.platform_name, platforms.manufacturer,
-                creators.creator_name AS manufacturer_name
-         FROM platforms
-         LEFT JOIN creators ON platforms.manufacturer = creators.id
-         WHERE platforms.id = $1;`,
-        [id]
-    );
+    const result = await pool.query("SELECT * FROM platforms WHERE id = $1;", [id]);
     return result.rows[0];
 }
 
-async function addNewPlatform(name, manufacturer) {
-    const addPlatformSQL = "INSERT INTO platforms (platform_name, manufacturer) VALUES ($1, $2);";
-    await pool.query(addPlatformSQL, [name, manufacturer]);
+async function addNewPlatform(name) {
+    const addPlatformSQL = "INSERT INTO platforms (platform_name) VALUES ($1);";
+    await pool.query(addPlatformSQL, [name]);
 }
 
-async function updatePlatformById(id, name, manufacturer) {
-    const updateSQL = "UPDATE platforms SET platform_name = $1, manufacturer = $2 WHERE id = $3;";
-    await pool.query(updateSQL, [name, manufacturer, id]);
+async function updatePlatformById(id, name) {
+    const updateSQL = "UPDATE platforms SET platform_name = $1 WHERE id = $2;";
+    await pool.query(updateSQL, [name, id]);
 }
 
 const games_by_platform_path = path.join(import.meta.dirname, 'games_by_platform.sql');

@@ -9,17 +9,17 @@ const create_games_table_path = path.join(import.meta.dirname, 'create_games_tab
 const CREATE_GAMES_TABLE_SQL = readFileSync(create_games_table_path, 'utf8');
 
 const gamesToInsert = [
-    { name: 'Pong', year: 1972 },
-    { name: 'pedit5/The Dungeon', year: 1975 },
-    { name: 'dnd/The Game of Dungeons', year: 1975 },
-    { name: 'Space Invaders', year: 1978 },
+    { name: 'Pong', year: 1972, quantity: 8 },
+    { name: 'pedit5/The Dungeon', year: 1975, quantity: 0 },
+    { name: 'dnd/The Game of Dungeons', year: 1975, quantity: 3 },
+    { name: 'Space Invaders', year: 1978, quantity: 12 },
 ];
 const gameSqlParameters = [];
 const placeholders = gamesToInsert.map((game, i) => {
-    gameSqlParameters.push(game.name, game.year);
-    return `($${i * 2 + 1}, $${i * 2 + 2})`;
+    gameSqlParameters.push(game.name, game.year, game.quantity);
+    return `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3})`;
 });
-const POPULATE_GAMES_TABLE_SQL = `INSERT INTO games (game_name, release_year) VALUES ${placeholders.join(', ')}`;
+const POPULATE_GAMES_TABLE_SQL = `INSERT INTO games (game_name, release_year, quantity) VALUES ${placeholders.join(', ')}`;
 
 const getArg = (name) => {
     const arg = argv.find(a => a.startsWith(`--${name}=`));

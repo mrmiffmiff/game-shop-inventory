@@ -9,17 +9,17 @@ const create_creators_table_path = path.join(import.meta.dirname, 'create_creato
 const CREATE_CREATORS_TABLE_SQL = readFileSync(create_creators_table_path, 'utf8');
 
 const creatorsToInsert = [
-    { creator_name: 'Atari, Inc.', founding_year: 1972, country: 'USA', website: null, type: 'company' },
-    { creator_name: 'Taito Corporation', founding_year: 1953, country: 'Japan', website: 'http://www.taito.com/', type: 'company' },
-    { creator_name: 'Richard Garriott', founding_year: 1979, country: 'USA', website: null, type: 'individual' },
-    { creator_name: 'University of Illinois', founding_year: 1867, country: 'USA', website: 'https://illinois.edu/', type: 'other' },
+    { creator_name: 'Atari, Inc.', country: 'USA' },
+    { creator_name: 'Taito Corporation', country: 'Japan' },
+    { creator_name: 'Richard Garriott', country: 'USA' },
+    { creator_name: 'University of Illinois', country: 'USA' },
 ];
 const creatorSqlParameters = [];
 const placeholders = creatorsToInsert.map((creator, i) => {
-    creatorSqlParameters.push(creator.creator_name, creator.founding_year, creator.country, creator.website, creator.type);
-    return `($${i * 5 + 1}, $${i * 5 + 2}, $${i * 5 + 3}, $${i * 5 + 4}, $${i * 5 + 5})`;
+    creatorSqlParameters.push(creator.creator_name, creator.country);
+    return `($${i * 2 + 1}, $${i * 2 + 2})`;
 });
-const POPULATE_CREATORS_TABLE_SQL = `INSERT INTO creators (creator_name, founding_year, country, website, type) VALUES ${placeholders.join(', ')}`;
+const POPULATE_CREATORS_TABLE_SQL = `INSERT INTO creators (creator_name, country) VALUES ${placeholders.join(', ')}`;
 
 const getArg = (name) => {
     const arg = argv.find(a => a.startsWith(`--${name}=`));

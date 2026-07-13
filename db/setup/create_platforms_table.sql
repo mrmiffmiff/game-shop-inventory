@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS platforms (
  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
- platform_name VARCHAR ( 255 ) NOT NULL,
- manufacturer INTEGER REFERENCES creators ( id )
+ platform_name VARCHAR ( 255 ) NOT NULL
 );

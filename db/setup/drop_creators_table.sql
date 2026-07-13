@@ -1,2 +1,1 @@
 DROP TABLE IF EXISTS creators;
-DROP TYPE IF EXISTS creator_type;

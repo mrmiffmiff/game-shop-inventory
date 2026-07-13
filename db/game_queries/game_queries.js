@@ -7,6 +7,7 @@ import path from "node:path";
  * @property {number} id
  * @property {string} game_name
  * @property {number} release_year
+ * @property {number} quantity
  */
 
 async function getAllGames() {
@@ -30,14 +31,14 @@ async function getGameById(id) {
     return result.rows[0];
 }
 
-async function addNewGame(name, releaseYear) {
-    const addGameSQL = "INSERT INTO games (game_name, release_year) VALUES ($1, $2);";
-    await pool.query(addGameSQL, [name, releaseYear]);
+async function addNewGame(name, releaseYear, quantity) {
+    const addGameSQL = "INSERT INTO games (game_name, release_year, quantity) VALUES ($1, $2, $3);";
+    await pool.query(addGameSQL, [name, releaseYear, quantity]);
 }
 
-async function updateGameById(id, name, releaseYear) {
-    const updateSQL = "UPDATE games SET game_name = $1, release_year = $2 WHERE id = $3;";
-    await pool.query(updateSQL, [name, releaseYear, id]);
+async function updateGameById(id, name, releaseYear, quantity) {
+    const updateSQL = "UPDATE games SET game_name = $1, release_year = $2, quantity = $3 WHERE id = $4;";
+    await pool.query(updateSQL, [name, releaseYear, quantity, id]);
 }
 
 const genres_of_game_path = path.join(import.meta.dirname, 'genres_of_game.sql');
@@ -78,15 +79,14 @@ const creators_of_game_path = path.join(import.meta.dirname, 'creators_of_game.s
 const CREATORS_OF_GAME_SQL = readFileSync(creators_of_game_path, 'utf8');
 
 /**
- * @typedef {Object} CreatorWithRole
+ * @typedef {Object} Creator
  * @property {number} id
  * @property {string} creator_name
- * @property {string} role
  */
 
 async function getCreatorsOfGame(id) {
     /**
-     * @type {import('pg').QueryResult<CreatorWithRole>}
+     * @type {import('pg').QueryResult<Creator>}
      */
     const result = await pool.query(CREATORS_OF_GAME_SQL, [id]);
     return result.rows;

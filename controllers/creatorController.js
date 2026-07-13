@@ -17,8 +17,7 @@ async function getAllCreators(req, res) {
  * @param {import('express').Response} res
 */
 async function getCreateCreator(req, res) {
-    const creatorTypes = await db.getCreatorTypes();
-    res.render("creatorForm", { title: "Create New Creator", header: "Create New Creator", creator: null, creatorName: null, country: null, website: null, foundingYear: null, type: null, creatorTypes: creatorTypes });
+    res.render("creatorForm", { title: "Create New Creator", header: "Create New Creator", creator: null, creatorName: null, country: null });
 }
 
 const validateCreator = [
@@ -30,17 +29,6 @@ const validateCreator = [
     })
         .notEmpty().withMessage("Creator name cannot be blank."),
     body("country").trim(),
-    body("website").trim(),
-    body("foundingYear").trim().optional({ checkFalsy: true })
-        .isInt().withMessage("Founding year must be a number.")
-        .toInt(),
-    body("type").trim().custom(async value => {
-        const creatorTypes = await db.getCreatorTypes();
-        if (!creatorTypes.includes(value)) {
-            throw new Error("Type must be one of: " + creatorTypes.join(", ") + ".");
-        }
-        return true;
-    }),
 ];
 
 const postCreateCreator = [
@@ -51,14 +39,13 @@ const postCreateCreator = [
      * @param {import('express').Response} res
      */
     async (req, res) => {
-        const { creatorName: inputName, country: inputCountry, website: inputWebsite, foundingYear: inputFoundingYear, type: inputType } = req.body;
+        const { creatorName: inputName, country: inputCountry } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            const creatorTypes = await db.getCreatorTypes();
-            return res.status(400).render("creatorForm", { title: "Create New Creator", header: "Create New Creator", creator: null, creatorName: inputName, country: inputCountry, website: inputWebsite, foundingYear: inputFoundingYear, type: inputType, creatorTypes: creatorTypes, errors: errors.array(), });
+            return res.status(400).render("creatorForm", { title: "Create New Creator", header: "Create New Creator", creator: null, creatorName: inputName, country: inputCountry, errors: errors.array(), });
         }
-        const { creatorName, country, website, foundingYear, type } = matchedData(req);
-        await db.addNewCreator(creatorName, foundingYear ?? null, country || null, website || null, type);
+        const { creatorName, country } = matchedData(req);
+        await db.addNewCreator(creatorName, country || null);
         res.redirect("/creators");
     }
 ];
@@ -83,8 +70,7 @@ async function getCreator(req, res) {
 async function getEditCreator(req, res) {
     const id = Number.parseInt(req.params.id);
     const creator = await db.getCreatorById(id);
-    const creatorTypes = await db.getCreatorTypes();
-    res.render("creatorForm", { title: "Edit Creator", header: "Edit Creator", creator: creator, creatorName: creator.creator_name, country: creator.country, website: creator.website, foundingYear: creator.founding_year, type: creator.type, creatorTypes: creatorTypes });
+    res.render("creatorForm", { title: "Edit Creator", header: "Edit Creator", creator: creator, creatorName: creator.creator_name, country: creator.country });
 }
 
 const putEditCreator = [
@@ -95,16 +81,15 @@ const putEditCreator = [
      * @param {import('express').Response} res
      */
     async (req, res) => {
-        const { creatorName: inputName, country: inputCountry, website: inputWebsite, foundingYear: inputFoundingYear, type: inputType } = req.body;
+        const { creatorName: inputName, country: inputCountry } = req.body;
         const id = Number.parseInt(req.params.id);
         const oldCreator = await db.getCreatorById(id);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            const creatorTypes = await db.getCreatorTypes();
-            return res.status(400).render("creatorForm", { title: "Edit Creator", header: "Edit Creator", creator: oldCreator, creatorName: inputName, country: inputCountry, website: inputWebsite, foundingYear: inputFoundingYear, type: inputType, creatorTypes: creatorTypes, errors: errors.array(), });
+            return res.status(400).render("creatorForm", { title: "Edit Creator", header: "Edit Creator", creator: oldCreator, creatorName: inputName, country: inputCountry, errors: errors.array(), });
         }
-        const { creatorName, country, website, foundingYear, type } = matchedData(req);
-        await db.updateCreatorById(id, creatorName, foundingYear ?? null, country || null, website || null, type);
+        const { creatorName, country } = matchedData(req);
+        await db.updateCreatorById(id, creatorName, country || null);
         res.redirect("/creators/" + id);
     }
 ]

@@ -1,7 +1,7 @@
 <%- include('partials/head') %>
     <h1><%= locals.game.game_name %></h1>
     <a href="/games/<%= locals.game.id %>/edit">Edit Game</a>
-    Released in <%= locals.game.release_year %>
+    Released in <%= locals.game.release_year %> | Quantity in stock: <%= locals.game.quantity %>
     <% if (locals.genres.length > 0) {%>
         <h2>Genres</h2>
         <ul>
@@ -22,7 +22,7 @@
         <h2>Creators</h2>
         <ul>
             <% for (const creator of locals.creators) {%>
-                <%- include('partials/creatorListing', { creator: creator, role: creator.role }) %>
+                <%- include('partials/creatorListing', { creator: creator }) %>
             <% } %>
         </ul>
     <% } %>

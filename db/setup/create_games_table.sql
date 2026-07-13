@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS games (
  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
  game_name VARCHAR ( 255 ) NOT NULL,
- release_year SMALLINT
+ release_year SMALLINT,
+ quantity INTEGER NOT NULL DEFAULT 0 CHECK (quantity >= 0)
 );

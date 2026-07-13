@@ -1,20 +1,14 @@
 <%- include('partials/head') %>
     <h1><%= locals.creator.creator_name %></h1>
     <a href="/creators/<%= locals.creator.id %>/edit">Edit Creator</a>
-    <% if (locals.creator.founding_year) { %>
-        <p><%= locals.creator.type === 'individual' ? "Started in" : "Founded in"%> <%= locals.creator.founding_year %></p>
-    <% } %>
     <% if (locals.creator.country) { %>
         <p>Country: <%= locals.creator.country %></p>
-    <% } %>
-    <% if (locals.creator.website) { %>
-        <p>Website: <a href="<%= locals.creator.website %>"><%= locals.creator.website %></a></p>
     <% } %>
     <% if (locals.games.length > 0) {%>
         <h2>Games</h2>
         <ul>
             <% for (const game of locals.games) {%>
-                <%- include('partials/gameListing', { game: game, role: game.role }) %>
+                <%- include('partials/gameListing', { game: game }) %>
             <% } %>
         </ul>
     <% } %>

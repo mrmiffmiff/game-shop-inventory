@@ -1,5 +1,4 @@
 import db from "../db/platform_queries/platform_queries.js";
-import creatorDb from "../db/creator_queries/creator_queries.js";
 import { body, validationResult, matchedData } from "express-validator";
 
 /**
@@ -18,8 +17,7 @@ async function getAllPlatforms(req, res) {
  * @param {import('express').Response} res
 */
 async function getCreatePlatform(req, res) {
-    const creators = await creatorDb.getAllCreators();
-    res.render("platformForm", { title: "Create New Platform", header: "Create New Platform", platform: null, platformName: null, manufacturer: null, creators: creators });
+    res.render("platformForm", { title: "Create New Platform", header: "Create New Platform", platform: null, platformName: null });
 }
 
 const validatePlatform = [
@@ -30,16 +28,6 @@ const validatePlatform = [
             .replace(/[“”„‟]/g, '"');
     })
         .notEmpty().withMessage("Platform name cannot be blank."),
-    body("manufacturer").trim().optional({ checkFalsy: true })
-        .isInt().withMessage("Invalid manufacturer selected.")
-        .toInt()
-        .custom(async value => {
-            const creators = await creatorDb.getAllCreators();
-            if (!creators.some(creator => creator.id === value)) {
-                throw new Error("Selected manufacturer does not exist.");
-            }
-            return true;
-        }),
 ];
 
 const postCreatePlatform = [
@@ -51,14 +39,12 @@ const postCreatePlatform = [
      */
     async (req, res) => {
         const inputName = req.body.platformName;
-        const inputManufacturer = req.body.manufacturer;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            const creators = await creatorDb.getAllCreators();
-            return res.status(400).render("platformForm", { title: "Create New Platform", header: "Create New Platform", platform: null, platformName: inputName, manufacturer: inputManufacturer, creators: creators, errors: errors.array(), });
+            return res.status(400).render("platformForm", { title: "Create New Platform", header: "Create New Platform", platform: null, platformName: inputName, errors: errors.array(), });
         }
-        const { platformName, manufacturer } = matchedData(req);
-        await db.addNewPlatform(platformName, manufacturer ?? null);
+        const { platformName } = matchedData(req);
+        await db.addNewPlatform(platformName);
         res.redirect("/platforms");
     }
 ];
@@ -83,8 +69,7 @@ async function getPlatform(req, res) {
 async function getEditPlatform(req, res) {
     const id = Number.parseInt(req.params.id);
     const platform = await db.getPlatformById(id);
-    const creators = await creatorDb.getAllCreators();
-    res.render("platformForm", { title: "Edit Platform", header: "Edit Platform", platform: platform, platformName: platform.platform_name, manufacturer: platform.manufacturer, creators: creators });
+    res.render("platformForm", { title: "Edit Platform", header: "Edit Platform", platform: platform, platformName: platform.platform_name });
 }
 
 const putEditPlatform = [
@@ -96,16 +81,14 @@ const putEditPlatform = [
      */
     async (req, res) => {
         const inputName = req.body.platformName;
-        const inputManufacturer = req.body.manufacturer;
         const id = Number.parseInt(req.params.id);
         const oldPlatform = await db.getPlatformById(id);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            const creators = await creatorDb.getAllCreators();
-            return res.status(400).render("platformForm", { title: "Edit Platform", header: "Edit Platform", platform: oldPlatform, platformName: inputName, manufacturer: inputManufacturer, creators: creators, errors: errors.array(), });
+            return res.status(400).render("platformForm", { title: "Edit Platform", header: "Edit Platform", platform: oldPlatform, platformName: inputName, errors: errors.array(), });
         }
-        const { platformName, manufacturer } = matchedData(req);
-        await db.updatePlatformById(id, platformName, manufacturer ?? null);
+        const { platformName } = matchedData(req);
+        await db.updatePlatformById(id, platformName);
         res.redirect("/platforms/" + id);
     }
 ]

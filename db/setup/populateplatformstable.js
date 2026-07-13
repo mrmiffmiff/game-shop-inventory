@@ -9,16 +9,16 @@ const create_platforms_table_path = path.join(import.meta.dirname, 'create_platf
 const CREATE_PLATFORMS_TABLE_SQL = readFileSync(create_platforms_table_path, 'utf8');
 
 const platformsToInsert = [
-    { platform_name: 'PLATO', manufacturer: 4 },        // manufacturer: University of Illinois
-    { platform_name: 'Arcade', manufacturer: null },     // manufacturer: N/A
-    { platform_name: 'Atari 2600', manufacturer: 1 },   // manufacturer: Atari, Inc.
+    { platform_name: 'PLATO' },
+    { platform_name: 'Arcade' },
+    { platform_name: 'Atari 2600' },
 ];
 const platformSqlParameters = [];
 const placeholders = platformsToInsert.map((platform, i) => {
-    platformSqlParameters.push(platform.platform_name, platform.manufacturer);
-    return `($${i * 2 + 1}, $${i * 2 + 2})`;
+    platformSqlParameters.push(platform.platform_name);
+    return `($${i + 1})`;
 });
-const POPULATE_PLATFORMS_TABLE_SQL = `INSERT INTO platforms (platform_name, manufacturer) VALUES ${placeholders.join(', ')}`;
+const POPULATE_PLATFORMS_TABLE_SQL = `INSERT INTO platforms (platform_name) VALUES ${placeholders.join(', ')}`;
 
 const getArg = (name) => {
     const arg = argv.find(a => a.startsWith(`--${name}=`));

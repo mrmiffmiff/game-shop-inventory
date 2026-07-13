@@ -9,19 +9,17 @@ const create_game_creators_table_path = path.join(import.meta.dirname, 'create_g
 const CREATE_GAME_CREATORS_TABLE_SQL = readFileSync(create_game_creators_table_path, 'utf8');
 
 const gameCreatorsToInsert = [
-    { game_id: 1, creator_id: 1, role: 'developer' }, // Pong - Atari, Inc. (developer)
-    { game_id: 1, creator_id: 1, role: 'publisher' }, // Pong - Atari, Inc. (publisher)
-    { game_id: 2, creator_id: 4, role: 'developer' }, // pedit5/The Dungeon - University of Illinois (developer)
-    { game_id: 3, creator_id: 4, role: 'developer' }, // dnd/The Game of Dungeons - University of Illinois (developer)
-    { game_id: 4, creator_id: 2, role: 'developer' }, // Space Invaders - Taito Corporation (developer)
-    { game_id: 4, creator_id: 2, role: 'publisher' }, // Space Invaders - Taito Corporation (publisher)
+    { game_id: 1, creator_id: 1 }, // Pong - Atari, Inc.
+    { game_id: 2, creator_id: 4 }, // pedit5/The Dungeon - University of Illinois
+    { game_id: 3, creator_id: 4 }, // dnd/The Game of Dungeons - University of Illinois
+    { game_id: 4, creator_id: 2 }, // Space Invaders - Taito Corporation
 ];
 const gameCreatorSqlParameters = [];
 const placeholders = gameCreatorsToInsert.map((row, i) => {
-    gameCreatorSqlParameters.push(row.game_id, row.creator_id, row.role);
-    return `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3})`;
+    gameCreatorSqlParameters.push(row.game_id, row.creator_id);
+    return `($${i * 2 + 1}, $${i * 2 + 2})`;
 });
-const POPULATE_GAME_CREATORS_TABLE_SQL = `INSERT INTO game_creators (game_id, creator_id, role) VALUES ${placeholders.join(', ')}`;
+const POPULATE_GAME_CREATORS_TABLE_SQL = `INSERT INTO game_creators (game_id, creator_id) VALUES ${placeholders.join(', ')}`;
 
 const getArg = (name) => {
     const arg = argv.find(a => a.startsWith(`--${name}=`));
