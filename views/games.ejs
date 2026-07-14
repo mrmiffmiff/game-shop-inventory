@@ -1,6 +1,7 @@
 <%- include('partials/head') %>
     <h1>All Games</h1>
     <a href="/games/create">Create Game</a>
+    <a href="/games/bulk-edit<%= locals.queryString ? '?' + locals.queryString : '' %>">Bulk Edit</a>
     <form method="get" action="/games">
         <label for="search">Search: </label>
         <input type="text" name="search" id="search" value="<%= locals.search %>" placeholder="Search game name">

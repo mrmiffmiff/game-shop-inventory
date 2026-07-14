@@ -6,6 +6,8 @@ const gameRouter = Router();
 gameRouter.get("/", Controller.getAllGames);
 gameRouter.get("/create", Controller.getCreateGame);
 gameRouter.post("/create", Controller.postCreateGame);
+gameRouter.get("/bulk-edit", Controller.getBulkEditGames);
+gameRouter.patch("/bulk-edit", Controller.patchBulkEditGames);
 gameRouter.get("/:id", Controller.getGame);
 gameRouter.get("/:id/edit", Controller.getEditGame);
 gameRouter.put("/:id/edit", Controller.putEditGame);

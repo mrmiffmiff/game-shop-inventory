@@ -279,6 +279,41 @@ const putEditGameCreators = [
     }
 ];
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function getBulkEditGames(req, res) {
+    const filters = parseGameFilters(req);
+    const games = await db.getFilteredGames(filters);
+    res.render("gamesBulkEdit", { title: "Bulk Edit Quantities", games });
+}
+
+const validateBulkQuantities = [
+    body("games.*.id").isInt().toInt(),
+    body("games.*.quantity").isInt({ min: 0 }).withMessage("Quantity must be a whole number no less than 0.").toInt(),
+];
+
+const patchBulkEditGames = [
+    validateBulkQuantities,
+    /**
+     *
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const games = req.body.games.map(g => ({ id: g.id, game_name: g.name, quantity: g.quantity }));
+            return res.status(400).render("gamesBulkEdit", { title: "Bulk Edit Quantities", games, errors: errors.array() });
+        }
+        const { games } = matchedData(req);
+        await db.updateQuantitiesBulk(games);
+        res.redirect("/games");
+    }
+];
+
 export default {
     getAllGames,
     getCreateGame,
@@ -292,4 +327,6 @@ export default {
     putEditGamePlatforms,
     getEditGameCreators,
     putEditGameCreators,
+    getBulkEditGames,
+    patchBulkEditGames,
 }

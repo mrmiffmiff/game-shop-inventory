@@ -211,12 +211,32 @@ async function setGameCreators(gameId, creatorIds) {
     }
 }
 
+/**
+ * @param {{id: number, quantity: number}[]} games
+ */
+async function updateQuantitiesBulk(games) {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        for (const g of games) {
+            await client.query('UPDATE games SET quantity = $1 WHERE id = $2', [g.quantity, g.id]);
+        }
+        await client.query('COMMIT');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
 export default {
     getAllGames,
     getFilteredGames,
     getGameById,
     addNewGame,
     updateGameById,
+    updateQuantitiesBulk,
     getGenresOfGame,
     getPlatformsOfGame,
     getCreatorsOfGame,

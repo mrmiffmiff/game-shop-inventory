@@ -1,0 +1,16 @@
+<%- include('partials/head') %>
+    <h1>Bulk Edit Quantities</h1>
+    <%- include('partials/errors') %>
+    <form action="/games/bulk-edit?_method=PATCH" method="post">
+        <% locals.games.forEach((game, i) => { %>
+            <div>
+                <label for="quantity-<%= game.id %>"><%= game.game_name %>: </label>
+                <input type="hidden" name="games[<%= i %>][id]" value="<%= game.id %>">
+                <input type="hidden" name="games[<%= i %>][name]" value="<%= game.game_name %>">
+                <input type="number" name="games[<%= i %>][quantity]" id="quantity-<%= game.id %>" value="<%= game.quantity %>" min="0">
+            </div>
+        <% }) %>
+        <button type="submit">Save all</button>
+    </form>
+    <p><a href="/games/">Back to game list</a></p>
+<%- include('partials/foot') %>
