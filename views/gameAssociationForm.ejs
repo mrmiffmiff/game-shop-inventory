@@ -1,7 +1,8 @@
 <%- include('partials/head') %>
     <h1><%= locals.title %></h1>
     <%- include('partials/errors') %>
-    <input type="text" data-checkbox-filter="#assoc-list" placeholder="Filter <%= locals.kind %>...">
+    <label for="assoc-filter">Filter <%= locals.kind %>: </label>
+    <input type="text" id="assoc-filter" data-checkbox-filter="#assoc-list" placeholder="Filter <%= locals.kind %>...">
     <form action="<%= locals.actionUrl %>?_method=PUT" method="post">
         <div id="assoc-list">
             <% for (const item of locals.allItems) { %>

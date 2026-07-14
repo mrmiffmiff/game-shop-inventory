@@ -1,6 +1,53 @@
 <%- include('partials/head') %>
     <h1>All Games</h1>
     <a href="/games/create">Create Game</a>
+    <form method="get" action="/games">
+        <label for="search">Search: </label>
+        <input type="text" name="search" id="search" value="<%= locals.search %>" placeholder="Search game name">
+        <fieldset>
+            <legend>Genres</legend>
+            <label for="genre-filter">Filter genres: </label>
+            <input type="text" id="genre-filter" data-checkbox-filter="#genre-checks" placeholder="Filter genres...">
+            <div id="genre-checks">
+                <% for (const genre of locals.allGenres) { %>
+                    <label>
+                        <input type="checkbox" name="genreIds" value="<%= genre.id %>"
+                            <%= locals.genreIds.includes(genre.id) ? 'checked' : '' %>>
+                        <%= genre.genre %>
+                    </label>
+                <% } %>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Platforms</legend>
+            <label for="platform-filter">Filter platforms: </label>
+            <input type="text" id="platform-filter" data-checkbox-filter="#platform-checks" placeholder="Filter platforms...">
+            <div id="platform-checks">
+                <% for (const platform of locals.allPlatforms) { %>
+                    <label>
+                        <input type="checkbox" name="platformIds" value="<%= platform.id %>"
+                            <%= locals.platformIds.includes(platform.id) ? 'checked' : '' %>>
+                        <%= platform.platform_name %>
+                    </label>
+                <% } %>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Creators</legend>
+            <label for="creator-filter">Filter creators: </label>
+            <input type="text" id="creator-filter" data-checkbox-filter="#creator-checks" placeholder="Filter creators...">
+            <div id="creator-checks">
+                <% for (const creator of locals.allCreators) { %>
+                    <label>
+                        <input type="checkbox" name="creatorIds" value="<%= creator.id %>"
+                            <%= locals.creatorIds.includes(creator.id) ? 'checked' : '' %>>
+                        <%= creator.creator_name %>
+                    </label>
+                <% } %>
+            </div>
+        </fieldset>
+        <button type="submit">Filter</button>
+    </form>
     <% if (locals.games) {%>
         <ul>
             <% for (const game of locals.games) {%>

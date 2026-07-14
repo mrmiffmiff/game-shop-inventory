@@ -19,6 +19,40 @@ async function getAllGames() {
 }
 
 /**
+ * @param {Object} filters
+ * @param {string} [filters.search]
+ * @param {number[]} [filters.genreIds]
+ * @param {number[]} [filters.platformIds]
+ * @param {number[]} [filters.creatorIds]
+ */
+async function getFilteredGames({ search, genreIds = [], platformIds = [], creatorIds = [] }) {
+    let query = "SELECT * FROM games g WHERE 1=1";
+    const params = [];
+    if (search) {
+        params.push(`%${search}%`);
+        query += ` AND g.game_name ILIKE $${params.length}`;
+    }
+    if (genreIds.length) {
+        params.push(genreIds);
+        query += ` AND g.id IN (SELECT game_id FROM game_genres WHERE genre_id = ANY($${params.length}::int[]))`;
+    }
+    if (platformIds.length) {
+        params.push(platformIds);
+        query += ` AND g.id IN (SELECT game_id FROM game_platforms WHERE platform_id = ANY($${params.length}::int[]))`;
+    }
+    if (creatorIds.length) {
+        params.push(creatorIds);
+        query += ` AND g.id IN (SELECT game_id FROM game_creators WHERE creator_id = ANY($${params.length}::int[]))`;
+    }
+    query += " ORDER BY g.release_year;";
+    /**
+     * @type {import('pg').QueryResult<Game>}
+     */
+    const { rows } = await pool.query(query, params);
+    return rows;
+}
+
+/**
  * 
  * @param {number} id 
  * @returns
@@ -179,6 +213,7 @@ async function setGameCreators(gameId, creatorIds) {
 
 export default {
     getAllGames,
+    getFilteredGames,
     getGameById,
     addNewGame,
     updateGameById,

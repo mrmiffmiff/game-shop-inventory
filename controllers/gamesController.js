@@ -10,13 +10,35 @@ function toArray(v) {
 }
 
 /**
+ * @param {import('express').Request} req
+ */
+function parseGameFilters(req) {
+    const search = req.query.search || "";
+    const genreIds = toArray(req.query.genreIds).map(Number);
+    const platformIds = toArray(req.query.platformIds).map(Number);
+    const creatorIds = toArray(req.query.creatorIds).map(Number);
+    return { search, genreIds, platformIds, creatorIds };
+}
+
+/**
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
 async function getAllGames(req, res) {
-    const games = await db.getAllGames();
-    res.render("games", { title: "All Games", games: games });
+    const filters = parseGameFilters(req);
+    const [games, allGenres, allPlatforms, allCreators] = await Promise.all([
+        db.getFilteredGames(filters),
+        genreDb.getAllGenres(),
+        platformDb.getAllPlatforms(),
+        creatorDb.getAllCreators(),
+    ]);
+    res.render("games", {
+        title: "All Games", games, allGenres, allPlatforms, allCreators,
+        search: filters.search, genreIds: filters.genreIds,
+        platformIds: filters.platformIds, creatorIds: filters.creatorIds,
+        queryString: req.originalUrl.split('?')[1] || "",
+    });
 }
 
 /**
