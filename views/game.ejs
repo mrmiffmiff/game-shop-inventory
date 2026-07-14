@@ -2,24 +2,27 @@
     <h1><%= locals.game.game_name %></h1>
     <a href="/games/<%= locals.game.id %>/edit">Edit Game</a>
     Released in <%= locals.game.release_year %> | Quantity in stock: <%= locals.game.quantity %>
+    <h2>Genres</h2>
+    <a href="/games/<%= locals.game.id %>/genres/edit">Manage genres</a>
     <% if (locals.genres.length > 0) {%>
-        <h2>Genres</h2>
         <ul>
             <% for (const genre of locals.genres) {%>
                 <%- include('partials/genreListing', { genre: genre }) %>
             <% } %>
         </ul>
     <% } %>
+    <h2>Platforms</h2>
+    <a href="/games/<%= locals.game.id %>/platforms/edit">Manage platforms</a>
     <% if (locals.platforms.length > 0) {%>
-        <h2>Platforms</h2>
         <ul>
             <% for (const platform of locals.platforms) {%>
                 <%- include('partials/platformListing', { platform: platform }) %>
             <% } %>
         </ul>
     <% } %>
+    <h2>Creators</h2>
+    <a href="/games/<%= locals.game.id %>/creators/edit">Manage creators</a>
     <% if (locals.creators.length > 0) {%>
-        <h2>Creators</h2>
         <ul>
             <% for (const creator of locals.creators) {%>
                 <%- include('partials/creatorListing', { creator: creator }) %>

@@ -1,0 +1,18 @@
+<%- include('partials/head') %>
+    <h1><%= locals.title %></h1>
+    <%- include('partials/errors') %>
+    <input type="text" data-checkbox-filter="#assoc-list" placeholder="Filter <%= locals.kind %>...">
+    <form action="<%= locals.actionUrl %>?_method=PUT" method="post">
+        <div id="assoc-list">
+            <% for (const item of locals.allItems) { %>
+                <label>
+                    <input type="checkbox" name="<%= locals.idField %>" value="<%= item.id %>"
+                        <%= locals.currentIds.includes(item.id) ? 'checked' : '' %>>
+                    <%= item[locals.labelField] %>
+                </label>
+            <% } %>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+    <p><a href="/games/<%= locals.game.id %>">Back to game</a></p>
+<%- include('partials/foot') %>

@@ -92,6 +92,91 @@ async function getCreatorsOfGame(id) {
     return result.rows;
 }
 
+/**
+ * Applies an add/remove diff to a game's junction-table associations inside an existing transaction.
+ * `table`/`column` must always be hardcoded literals from the wrapper functions below, never derived
+ * from request data, since they are interpolated directly into the SQL.
+ * @param {import('pg').PoolClient} client
+ * @param {string} table
+ * @param {string} column
+ * @param {number} gameId
+ * @param {number[]} selectedIds
+ */
+async function syncGameAssociations(client, table, column, gameId, selectedIds) {
+    const { rows } = await client.query(
+        `SELECT ${column} FROM ${table} WHERE game_id = $1`, [gameId]
+    );
+    const currentIds = rows.map(r => r[column]);
+    const toAdd = selectedIds.filter(id => !currentIds.includes(id));
+    const toRemove = currentIds.filter(id => !selectedIds.includes(id));
+    if (toAdd.length) {
+        await client.query(
+            `INSERT INTO ${table} (game_id, ${column}) SELECT $1, unnest($2::int[])`,
+            [gameId, toAdd]
+        );
+    }
+    if (toRemove.length) {
+        await client.query(
+            `DELETE FROM ${table} WHERE game_id = $1 AND ${column} = ANY($2::int[])`,
+            [gameId, toRemove]
+        );
+    }
+}
+
+/**
+ * @param {number} gameId
+ * @param {number[]} genreIds
+ */
+async function setGameGenres(gameId, genreIds) {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        await syncGameAssociations(client, 'game_genres', 'genre_id', gameId, genreIds);
+        await client.query('COMMIT');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+/**
+ * @param {number} gameId
+ * @param {number[]} platformIds
+ */
+async function setGamePlatforms(gameId, platformIds) {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        await syncGameAssociations(client, 'game_platforms', 'platform_id', gameId, platformIds);
+        await client.query('COMMIT');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+/**
+ * @param {number} gameId
+ * @param {number[]} creatorIds
+ */
+async function setGameCreators(gameId, creatorIds) {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        await syncGameAssociations(client, 'game_creators', 'creator_id', gameId, creatorIds);
+        await client.query('COMMIT');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
 export default {
     getAllGames,
     getGameById,
@@ -100,4 +185,7 @@ export default {
     getGenresOfGame,
     getPlatformsOfGame,
     getCreatorsOfGame,
+    setGameGenres,
+    setGamePlatforms,
+    setGameCreators,
 }
