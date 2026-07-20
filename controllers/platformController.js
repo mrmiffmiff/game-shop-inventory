@@ -93,11 +93,35 @@ const putEditPlatform = [
     }
 ]
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function getDeletePlatform(req, res) {
+    const id = Number.parseInt(req.params.id);
+    const platform = await db.getPlatformById(id);
+    res.render("deleteConfirm", { title: `Delete Platform ${platform.platform_name}`, resource: { id: id, name: platform.platform_name, type: "platform" }, })
+}
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function deletePlatform(req, res) {
+    const id = Number.parseInt(req.params.id);
+    await db.deletePlatformById(id);
+    res.redirect("/platforms");
+}
+
 export default {
     getAllPlatforms,
     getCreatePlatform,
     postCreatePlatform,
     getEditPlatform,
     putEditPlatform,
-    getPlatform
+    getPlatform,
+    getDeletePlatform,
+    deletePlatform,
 }

@@ -1,6 +1,7 @@
 <%- include('partials/head') %>
     <h1><%= locals.game.game_name %></h1>
     <a href="/games/<%= locals.game.id %>/edit">Edit Game</a>
+    <a href="/games/<%= locals.game.id %>/delete">Delete Game</a>
     Released in <%= locals.game.release_year %> | Quantity in stock: <%= locals.game.quantity %>
     <h2>Genres</h2>
     <a href="/games/<%= locals.game.id %>/genres/edit">Manage genres</a>

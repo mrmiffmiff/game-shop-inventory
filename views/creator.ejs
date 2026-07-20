@@ -1,6 +1,7 @@
 <%- include('partials/head') %>
     <h1><%= locals.creator.creator_name %></h1>
     <a href="/creators/<%= locals.creator.id %>/edit">Edit Creator</a>
+    <a href="/creators/<%= locals.creator.id %>/delete">Delete Creator</a>
     <% if (locals.creator.country) { %>
         <p>Country: <%= locals.creator.country %></p>
     <% } %>

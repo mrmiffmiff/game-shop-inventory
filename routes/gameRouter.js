@@ -17,5 +17,7 @@ gameRouter.get("/:id/platforms/edit", Controller.getEditGamePlatforms);
 gameRouter.put("/:id/platforms/edit", Controller.putEditGamePlatforms);
 gameRouter.get("/:id/creators/edit", Controller.getEditGameCreators);
 gameRouter.put("/:id/creators/edit", Controller.putEditGameCreators);
+gameRouter.get("/:id/delete", Controller.getDeleteGame);
+gameRouter.delete("/:id/delete", Controller.deleteGame);
 
 export default gameRouter;

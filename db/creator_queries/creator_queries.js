@@ -58,10 +58,15 @@ async function getGamesByCreator(id) {
     return result.rows;
 }
 
+async function deleteCreatorById(id) {
+    await pool.query("DELETE FROM creators WHERE id = $1;", [id]);
+}
+
 export default {
     getAllCreators,
     getCreatorById,
     addNewCreator,
     updateCreatorById,
     getGamesByCreator,
+    deleteCreatorById,
 };

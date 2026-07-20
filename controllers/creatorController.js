@@ -94,11 +94,35 @@ const putEditCreator = [
     }
 ]
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function getDeleteCreator(req, res) {
+    const id = Number.parseInt(req.params.id);
+    const creator = await db.getCreatorById(id);
+    res.render("deleteConfirm", { title: `Delete Creator ${creator.creator_name}`, resource: { id: id, name: creator.creator_name, type: "creator" }, })
+}
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function deleteCreator(req, res) {
+    const id = Number.parseInt(req.params.id);
+    await db.deleteCreatorById(id);
+    res.redirect("/creators");
+}
+
 export default {
     getAllCreators,
     getCreateCreator,
     postCreateCreator,
     getEditCreator,
     putEditCreator,
-    getCreator
+    getCreator,
+    getDeleteCreator,
+    deleteCreator,
 }

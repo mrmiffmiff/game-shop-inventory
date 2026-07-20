@@ -230,6 +230,10 @@ async function updateQuantitiesBulk(games) {
     }
 }
 
+async function deleteGameById(id) {
+    await pool.query("DELETE FROM games WHERE id = $1;", [id]);
+}
+
 export default {
     getAllGames,
     getFilteredGames,
@@ -243,4 +247,5 @@ export default {
     setGameGenres,
     setGamePlatforms,
     setGameCreators,
+    deleteGameById,
 }

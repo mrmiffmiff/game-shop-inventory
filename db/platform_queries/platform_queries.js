@@ -57,10 +57,15 @@ async function getGamesOnPlatform(id) {
     return result.rows;
 }
 
+async function deletePlatformById(id) {
+    await pool.query("DELETE FROM platforms WHERE id = $1;", [id]);
+}
+
 export default {
     getAllPlatforms,
     getPlatformById,
     addNewPlatform,
     updatePlatformById,
     getGamesOnPlatform,
+    deletePlatformById,
 };

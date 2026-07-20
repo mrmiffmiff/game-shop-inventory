@@ -1,6 +1,7 @@
 <%- include('partials/head') %>
     <h1><%= locals.platform.platform_name %></h1>
     <a href="/platforms/<%= locals.platform.id %>/edit">Edit Platform</a>
+    <a href="/platforms/<%= locals.platform.id %>/delete">Delete Platform</a>
     <% if (locals.games.length > 0) {%>
         <h2>Games available on this platform</h2>
         <ul>

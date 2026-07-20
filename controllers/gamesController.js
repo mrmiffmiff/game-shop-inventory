@@ -314,6 +314,28 @@ const patchBulkEditGames = [
     }
 ];
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function getDeleteGame(req, res) {
+    const id = Number.parseInt(req.params.id);
+    const game = await db.getGameById(id);
+    res.render("deleteConfirm", { title: `Delete Game ${game.game_name}`, resource: { id: id, name: game.game_name, type: "game" }, })
+}
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function deleteGame(req, res) {
+    const id = Number.parseInt(req.params.id);
+    await db.deleteGameById(id);
+    res.redirect("/games");
+}
+
 export default {
     getAllGames,
     getCreateGame,
@@ -329,4 +351,6 @@ export default {
     putEditGameCreators,
     getBulkEditGames,
     patchBulkEditGames,
+    getDeleteGame,
+    deleteGame,
 }
