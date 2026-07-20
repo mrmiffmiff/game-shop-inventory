@@ -94,11 +94,35 @@ const putEditGenre = [
     }
 ]
 
+/**
+ * 
+ * @param {import('express').Request} req 
+ * @param {import('express').Response} res 
+ */
+async function getDeleteGenre(req, res) {
+    const id = Number.parseInt(req.params.id);
+    const genreName = await db.getGenreNameById(id);
+    res.render("deleteConfirm", { title: `Delete Genre ${genreName}`, resource: { id: id, name: genreName, type: "genre" }, })
+}
+
+/**
+ * 
+ * @param {import('express').Request} req 
+ * @param {import('express').Response} res 
+ */
+async function deleteGenre(req, res) {
+    const id = Number.parseInt(req.params.id);
+    await db.deleteGenreById(id);
+    res.redirect("/genres");
+}
+
 export default {
     getAllGenres,
     getCreateGenre,
     postCreateGenre,
     getEditGenre,
     putEditGenre,
-    getGenre
+    getGenre,
+    getDeleteGenre,
+    deleteGenre,
 }

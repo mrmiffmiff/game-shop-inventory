@@ -9,5 +9,7 @@ genreRouter.post("/create", Controller.postCreateGenre);
 genreRouter.get("/:id", Controller.getGenre);
 genreRouter.get("/:id/edit", Controller.getEditGenre);
 genreRouter.put("/:id/edit", Controller.putEditGenre);
+genreRouter.get("/:id/delete", Controller.getDeleteGenre);
+genreRouter.delete("/:id/delete", Controller.deleteGenre);
 
 export default genreRouter;

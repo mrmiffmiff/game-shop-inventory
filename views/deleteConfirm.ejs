@@ -1,0 +1,8 @@
+<%- include('partials/head') %>
+    <h1>Confirm Deletion</h1>
+    <p>Are you sure you want to delete the <%= locals.resource.type %> <%= locals.resource.name %>?</p>
+    <form action="/<%= locals.resource.type %>s/<%= locals.resource.id %>/delete?_method=DELETE" method="post">
+        <button type="submit">Delete</button>
+        <button type="button" onclick="window.location.href='/<%= locals.resource.type %>s/<%= locals.resource.id %>'">Cancel</button>
+    </form>
+<%- include('partials/foot') %>
